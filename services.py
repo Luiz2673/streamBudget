@@ -4,11 +4,11 @@ services_list = [
         "price": 140.00
     },
     {
-        "serviceName": "Limpeza Preventiva e Tróca de Pasta Térmica",
+        "serviceName": "Limpeza Preventiva + \nTróca de Pasta Térmica",
         "price": 150.00
     },    
     {
-        "serviceName": "Instalação do Pacote Office - Com Ativador",
+        "serviceName": "Instalação do Pacote Office - \nCom Ativador",
         "price": 90.00
     },   
     {
@@ -16,7 +16,7 @@ services_list = [
         "price": 120.00
     },
     {
-        "serviceName": "Troca de Hardware + Manutenção Preventiva",
+        "serviceName": "Troca de Hardware + Manutenção \nPreventiva",
         "price": 150.00
     },
 ]
