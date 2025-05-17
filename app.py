@@ -2,9 +2,11 @@ import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 from services import services_list
 from io import BytesIO
+from datetime import datetime
+import os
 
 
-image = Image.open("./Modelo de Orçamento de T.I.png")
+image = Image.open("./Modelo de Orçamento Stream Budget.png")
 align = ImageDraw.Draw(image)
 
 st.set_page_config(page_title="⚙️Stream Budget", layout='wide')
@@ -37,6 +39,23 @@ def get_service_data(service_name, quantity):
             unit_price = service["price"]
             return service_name, f"R$ {unit_price:.2f}", str(quantity), f"R$ {unit_price * quantity:.2f}"
     return service_name, "R$ 0.00", str(quantity), "R$ 0.00"
+
+def get_next_os_number(file_path="os_counter.txt"):
+    # Se o arquivo não existir, cria com valor 1
+    if not os.path.exists(file_path):
+        with open(file_path, "w") as f:
+            f.write("1")
+        return 1
+
+    with open(file_path, "r") as f:
+        number = int(f.read().strip())
+
+    # Incrementa e salva de volta
+    next_number = number + 1
+    with open(file_path, "w") as f:
+        f.write(str(next_number))
+
+    return number
 
 
 
@@ -98,10 +117,13 @@ if processar:
     align.text((1012, 1337), qtd3, fill='black', font=font_client, stroke_width=0.1)
     align.text((1122, 1337), total3, fill='black', font=font_client, stroke_width=0.1)
     # Número da Ordem de Serviço:
-    align.text((1122, 729), "01", fill='black', font=font_os, stroke_width=0.1)
+    os_number = get_next_os_number()
+    align.text((1122, 729), f"{os_number:02}", fill='black', font=font_os, stroke_width=0.1)
+
     # Data do Orçamento:
-    align.text((1000, 433), "01/06/2025", fill='black', font=font_date, stroke_width=0.1)
-    # Cálculo do valor total final:
+    current_date = datetime.now().strftime("%d/%m/%Y")
+    align.text((1000, 433), current_date, fill='black', font=font_date, stroke_width=0.1)
+
     # Calcular valor total de todos os serviços
     def convert_to_float(value):
         return float(value.replace("R$ ", ""))
@@ -136,7 +158,7 @@ if processar:
                 st.download_button(
                     label="⬇️ Download",
                     data=img_buffer.getvalue(),
-                    file_name=f"Orçamento de {customer} - OS 02.png",
+                    file_name=f"Orçamento de {customer} - OS {os_number:02}.png",
                     mime="image/png"
                 )
         except Exception as e:
